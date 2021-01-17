@@ -15,4 +15,6 @@ const Events = {
   ProjectDurationModified,
 };
 
+console.log("Events");
+
 export default Events;

@@ -1,6 +1,9 @@
-const firebase = require("firebase/app");
-require("firebase/database");
-var firebaseConfig = {
+import firebase from "firebase/app"
+import "firebase/firestore";
+import "firebase/database";
+import "firebase/analytics";
+
+const firebaseConfig = {
   apiKey: "AIzaSyC2EaYmUVsz6CPSF3dOVfb1JysCD1Y53ss",
   authDomain: "resumematrix-3ec74.firebaseapp.com",
   databaseURL: "https://resumematrix-3ec74-default-rtdb.firebaseio.com",
@@ -10,10 +13,11 @@ var firebaseConfig = {
   appId: "1:556933440602:web:af3384f04103647d952463",
   measurementId: "G-F5685ZLZRC"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref();
 
-const Data = function() {
+const DataFactory = function() {
   const CreateProfile = function(profile){
     // TODO: Figure out UI flow for new profiles
     return db.push(profile).then((x)=>console.log(x));
@@ -27,7 +31,9 @@ const Data = function() {
   const DeleteProfile = function(){
     // TODO: Figure out ui flow for deleting profiles
   };
-  return {GetProfile,UpdateProfile,DeleteProfile}
+  return {CreateProfile,ReadProfile,UpdateProfile,DeleteProfile};
 }
 
-export default Data();
+const data = DataFactory();
+
+export default data;

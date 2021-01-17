@@ -1,3 +1,4 @@
+console.log("Skill");
 export default function CreateSkill() {
   const Name = "";
   const Category = "";

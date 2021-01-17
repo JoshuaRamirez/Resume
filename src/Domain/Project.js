@@ -1,7 +1,8 @@
 import Events from "./Events";
-import CreateCollection from "./Collection";
+import Collection from "./Collection";
+import Skill from "./Skill";
 
-const CreateProject = () => {
+const Project = () => {
 
   // Private Fields
   let _startDate;
@@ -21,9 +22,9 @@ const CreateProject = () => {
   let CalculateDurationInYears;
 
   initialize = () => {
-    Architectures = CreateCollection(createSkillCollectionOptions("Architectures"));
-    Frameworks = CreateCollection(skillCollectionOptions("Frameworks"));
-    Languages = CreateCollection(skillCollectionOptions("Languages"));
+    Architectures = Collection(createSkillCollectionOptions("Architectures"));
+    Frameworks = Collection(skillCollectionOptions("Frameworks"));
+    Languages = Collection(skillCollectionOptions("Languages"));
   };
 
   createSkillCollectionOptions = (category) => {
@@ -47,9 +48,9 @@ const CreateProject = () => {
     _startDate = json.Start;ate,
     _endDate = json.End;ate,
     _duration = json.Duration;
-    Architectures.Hydrate(json.Architectures);
-    Frameworks.Hydrate(json.Frameworks);
-    Languages.Hydrate(json.Languages);
+    Architectures.HydrateIn(json.Architectures, Skill);
+    Frameworks.HydrateIn(json.Frameworks, Skill);
+    Languages.HydrateIn(json.Languages, Skill);
   };
   
   HydrateOut = () => {
@@ -62,9 +63,10 @@ const CreateProject = () => {
       Languages: Languages.HydrateOut(),
     }
   };
-  
- 
-  const Project = {
+
+  initialize();
+
+  return {
     SetDuration,
     get Duration() {
       return _duration;
@@ -79,11 +81,9 @@ const CreateProject = () => {
     Frameworks,
     Languages,
   };
-  
-  initialize();
-  
-  return Project;
 
-}
+};
 
-export default CreateProject;
+console.log("Project");
+
+export default Project;
