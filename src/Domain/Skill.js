@@ -7,7 +7,7 @@ export default function CreateSkill() {
   const Years = 0;
   const Projects = 0;
   const Skill = {
-    Name, Rating, Years, Interest, Projects,
+    Name, Category, Rating, Years, Interest, Projects,
   };
  return Skill;
 }

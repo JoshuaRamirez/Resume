@@ -60,8 +60,8 @@ const Profile = () => {
   };
 
   updateProjectSkillDurations = (project, oldValue, newValue) => {
-    categories.forEach(category => {
-      project[category].Items.forEach(skillName => {
+    categories.forEach(skillCategory => {
+      project[skillCategory].Items.forEach(skillName => {
         const skill = Profile[skillCategory].FindByName(skillName);
         if (skill) {
           skill.Years -= oldValue;
@@ -87,18 +87,18 @@ const Profile = () => {
   rollupSkills = () => {
     const skillNames = new Set();
     Projects.Items.forEach(project => {
-      categories.forEach(category => {
-        project[category].Items.forEach(skillName => {
+      categories.forEach(skillCategory => {
+        project[skillCategory].Items.forEach(skillName => {
           skillNames.add(skillName);
         });
       });
     });
-    for (let skillName of skills) {
-      const skill = Profile[skillCategory].FindByName(skillName);
-      skill.Projects = 0;
-      skill.Years = 0;
-      Projects.Items.forEach((project) => {
-        categories.forEach(category => {
+    for (let skillName of skillNames) {
+      categories.forEach(skillCategory => {
+        const skill = Profile[skillCategory].FindByName(skillName);
+        skill.Projects = 0;
+        skill.Years = 0;
+        Projects.Items.forEach((project) => {
           project[skillCategory].Items.forEach(skillItem => {
             if (skillName === skillItem) {
               skill.Projects += 1;
@@ -114,11 +114,11 @@ const Profile = () => {
     Architectures = Collection();
     Frameworks = Collection();
     Languages = Collection();
-    Projects = Collection({HydrationOutEnabled: true});
+    Projects = Collection({ HydrationOutEnabled: true });
     categories = ["Architectures", "Frameworks", "Languages"];
     console.log("Profile Initialized");
   };
-  
+
   initialize();
 
   return {

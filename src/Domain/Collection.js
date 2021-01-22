@@ -9,7 +9,7 @@ const Collection = (options) => {
   //Private Functions
   let initialize;
   let modifiedEventPublisher;
-  
+
   //Public Functions
   let Add;
   let Remove;
@@ -18,10 +18,10 @@ const Collection = (options) => {
   let HydrateOut;
   let RemoveByName;
 
-  
+
 
   Add = (item) => {
-    item.push(project);
+    item.push(item);
     modifiedEventPayload.Item = item;
     modifiedEventPayload.Change = "added";
     modifiedEventPublisher(modifiedEventPayload);
@@ -40,6 +40,7 @@ const Collection = (options) => {
   };
 
   HydrateIn = (initialItems, domainObject) => {
+    let domainItems;
     if (domainObject) {
       domainItems = initialItems.map(item => domainObject().HydrateIn(item));
       items = [...domainItems];
@@ -63,10 +64,10 @@ const Collection = (options) => {
   FindByName = (name) => {
     return items.find(item => item.Name === name);
   };
-  
-  
-  initialize = () => {    
-    modifiedEventPublisher = () => {};
+
+
+  initialize = () => {
+    modifiedEventPublisher = () => { };
     modifiedEventPayload = {};
     itemName = "";
     hydrateOut = false;
@@ -86,7 +87,7 @@ const Collection = (options) => {
     console.log("Collection Initialized");
   };
 
-  initialize(); 
+  initialize();
 
   return {
     Add,

@@ -4,9 +4,10 @@ import Skill from "./Skill";
 
 const Project = () => {
 
-  // Private Fields
+  // Private Fields 
   let _startDate;
   let _endDate;
+  let _duration;
 
   // Public Fields
   let Architectures;
@@ -19,12 +20,14 @@ const Project = () => {
   
   // Public Functions
   let SetDuration;
-  let CalculateDurationInYears;
+  let HydrateIn;
+  let HydrateOut;
+  //let CalculateDurationInYears;
 
   initialize = () => {
     Architectures = Collection(createSkillCollectionOptions("Architectures"));
-    Frameworks = Collection(skillCollectionOptions("Frameworks"));
-    Languages = Collection(skillCollectionOptions("Languages"));
+    Frameworks = Collection(createSkillCollectionOptions("Frameworks"));
+    Languages = Collection(createSkillCollectionOptions("Languages"));
   };
 
   createSkillCollectionOptions = (category) => {
@@ -45,8 +48,8 @@ const Project = () => {
   };
   
   HydrateIn = (json) => {    
-    _startDate = json.Start;ate,
-    _endDate = json.End;ate,
+    _startDate = json.StartDate,
+    _endDate = json.EndDate,
     _duration = json.Duration;
     Architectures.HydrateIn(json.Architectures, Skill);
     Frameworks.HydrateIn(json.Frameworks, Skill);

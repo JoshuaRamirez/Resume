@@ -1,11 +1,8 @@
 module.exports = {
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: `
-          @import "@/scss/_variables.scss";
-        `
-      }
-    }
+  devServer: {
+    disableHostCheck: true
+  },
+  configureWebpack: {
+    devtool: 'source-map'
   }
-};
+}
