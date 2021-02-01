@@ -44,8 +44,7 @@ const onRemoveArchitectureButtonClicked = (index) => {
   profile.Architectures.Items.splice(index, 1);
 };
 const onAddArchitectureButtonClicked = function () {
-  alert("asdf");
-  profile.Architectures.Items.push({
+  profile.Architectures.Add({
     Skill: "",
     Years: "",
     Rating: "",
