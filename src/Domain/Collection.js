@@ -3,8 +3,10 @@ const Collection = (options) => {
   //Private Fields
   let hydrateOut;
   let itemName;
-  let items;
   let modifiedEventPayload;
+  
+  //Public Fields
+  let Items;
 
   //Private Functions
   let initialize;
@@ -21,14 +23,14 @@ const Collection = (options) => {
 
 
   Add = (item) => {
-    item.push(item);
+    Items.push(item);
     modifiedEventPayload.Item = item;
     modifiedEventPayload.Change = "added";
     modifiedEventPublisher(modifiedEventPayload);
   };
 
   Remove = (test) => {
-    items = items.map(item => {
+    Items = Items.map(item => {
       if (test(item)) {
         modifiedEventPayload.Item = item;
         modifiedEventPayload.Change = "removed";
@@ -43,15 +45,15 @@ const Collection = (options) => {
     let domainItems;
     if (domainObject) {
       domainItems = initialItems.map(item => domainObject().HydrateIn(item));
-      items = [...domainItems];
+      Items = [...domainItems];
     } else {
-      items = [...initialItems];
+      Items = [...initialItems];
     }
   };
 
   HydrateOut = () => {
     if (hydrateOut) {
-      return items.map(x => x.HydrateOut());
+      return Items.map(x => x.HydrateOut());
     } else {
       return [...Collection.Items];
     }
@@ -62,7 +64,7 @@ const Collection = (options) => {
   };
 
   FindByName = (name) => {
-    return items.find(item => item.Name === name);
+    return Items.find(item => item.Name === name);
   };
 
 
@@ -83,22 +85,20 @@ const Collection = (options) => {
     if (options && options.HydrationOutEnabled) {
       hydrateOut = true;
     }
-    items = [];
+    Items = [];
     console.log("Collection Initialized");
   };
 
   initialize();
 
   return {
+    Items,
     Add,
     Remove,
     RemoveByName,
     FindByName,
     HydrateIn,
     HydrateOut,
-    get Items() {
-      return [...items];
-    }
   };
 
 };
