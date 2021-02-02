@@ -32,14 +32,18 @@
         </td>
       </tr>
     </table>
+    <button v-on:click="onSaveButtonClicked()">Save</button>
   </div>
 </template>
 
 <script>
 import Runtime from "../Domain/Runtime";
 const profile = Runtime.Profile;
-console.log(profile);
 const created = function () {};
+const onSaveButtonClicked = () => {
+  const json = profile.HydrateOut();
+  console.log(json);
+};
 const onRemoveArchitectureButtonClicked = (index) => {
   profile.Architectures.Items.splice(index, 1);
 };
@@ -57,6 +61,7 @@ const data = function () {
 const methods = {
   onAddArchitectureButtonClicked,
   onRemoveArchitectureButtonClicked,
+  onSaveButtonClicked
 };
 export default { data, methods, created };
 </script>
