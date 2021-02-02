@@ -86,7 +86,6 @@ const Collection = (options) => {
       hydrateOut = true;
     }
     Items = [];
-    console.log("Collection Initialized");
   };
 
   initialize();
@@ -102,5 +101,4 @@ const Collection = (options) => {
   };
 
 };
-console.log("Collection");
 export default Collection;
