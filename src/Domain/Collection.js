@@ -1,36 +1,19 @@
 const Collection = (options) => {
 
-  //Private Fields
-  let hydrateOut;
-  let itemName;
-  let modifiedEventPayload;
-  
-  //Public Fields
-  let Items;
+  let modifiedEventPublisher = () => { };
+  let modifiedEventPayload = {};
+  let itemName = "";
+  let isComplexObjectArray = false;
 
-  //Private Functions
-  let initialize;
-  let modifiedEventPublisher;
-
-  //Public Functions
-  let Add;
-  let Remove;
-  let FindByName;
-  let HydrateIn;
-  let HydrateOut;
-  let RemoveByName;
-
-
-
-  Add = (item) => {
-    Items.push(item);
+  const Add = (item) => {
+    me.Items.push(item);
     modifiedEventPayload.Item = item;
     modifiedEventPayload.Change = "added";
     modifiedEventPublisher(modifiedEventPayload);
   };
 
-  Remove = (test) => {
-    Items = Items.map(item => {
+  const Remove = (test) => {
+    const subset = me.Items.map(item => {
       if (test(item)) {
         modifiedEventPayload.Item = item;
         modifiedEventPayload.Change = "removed";
@@ -39,40 +22,46 @@ const Collection = (options) => {
         return item;
       }
     });
+    me.Reset(subset);
   };
 
-  HydrateIn = (initialItems, domainObject) => {
-    let domainItems;
-    if (domainObject) {
-      domainItems = initialItems.map(item => domainObject().HydrateIn(item));
-      Items = [...domainItems];
+  const Reset = function(withItems) {
+    me.Items.splice(0, me.Items.length);
+    me.Items.push(...withItems);
+  };
+
+  const HydrateIn = (initialItems, domainClass) => {
+    if (!initialItems) return;
+    let domainObjects;
+    if (domainClass) {
+      domainObjects = initialItems.map(item => {
+        const domainObject = domainClass();
+        domainObject.HydrateIn(item);
+        return domainObject;
+      });
+      me.Reset(domainObjects);
     } else {
-      Items = [...initialItems];
+      me.Reset(initialItems);
     }
   };
 
-  HydrateOut = () => {
-    if (hydrateOut) {
-      return Items.map(x => x.HydrateOut());
+  const HydrateOut = () => {
+    if (isComplexObjectArray) {
+      return me.Items.map(x => x.HydrateOut());
     } else {
-      return [...Collection.Items];
+      return [...me.Items];
     }
   }
 
-  RemoveByName = (name) => {
+  const RemoveByName = (name) => {
     Remove(item => item.Name === name);
   };
 
-  FindByName = (name) => {
-    return Items.find(item => item.Name === name);
+  const FindByName = (name) => {
+    return me.Items.find(item => item.Name === name);
   };
 
-
-  initialize = () => {
-    modifiedEventPublisher = () => { };
-    modifiedEventPayload = {};
-    itemName = "";
-    hydrateOut = false;
+  const initialize = () => {
     if (options && options.ModifiedEventPublisher) {
       modifiedEventPublisher = options.ModifiedEventPublisher;
     }
@@ -82,23 +71,25 @@ const Collection = (options) => {
     if (options && options.ItemName) {
       itemName = options.itemName;
     }
-    if (options && options.HydrationOutEnabled) {
-      hydrateOut = true;
+    if (options && options.IsComplexObjectArray) {
+      isComplexObjectArray = true;
     }
-    Items = [];
   };
 
   initialize();
 
-  return {
-    Items,
+  const me = {
+    Items: [],
     Add,
     Remove,
     RemoveByName,
     FindByName,
+    Reset,
     HydrateIn,
     HydrateOut,
   };
+
+  return me;
 
 };
 export default Collection;

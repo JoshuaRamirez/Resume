@@ -87,6 +87,4 @@ const Project = () => {
 
 };
 
-console.log("Project");
-
 export default Project;

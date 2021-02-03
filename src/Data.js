@@ -15,20 +15,22 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref();
+const db = firebase.database();
 
 const DataFactory = function() {
-  const CreateProfile = function(profile){
+  const CreateProfile = async function(profile){
     // TODO: Figure out UI flow for new profiles
-    return db.push(profile).then((x)=>console.log(x));
+    return db.ref("Profiles").push(profile).then((x)=>console.log(x));
   };
-  const ReadProfile = function(id){
-    
+  const ReadProfile = async function(id){
+    const ref = await db.ref("profiles/" + id).get();
+    return ref.val();
   };
-  const UpdateProfile = function(profile){
-    return db.set(profile);
+  const UpdateProfile = async function(profile){
+    profile = JSON.parse(JSON.stringify(profile));
+    return db.ref("profiles/" + profile.Id).set(profile);
   };
-  const DeleteProfile = function(){
+  const DeleteProfile = async function(){
     // TODO: Figure out ui flow for deleting profiles
   };
   return {CreateProfile,ReadProfile,UpdateProfile,DeleteProfile};

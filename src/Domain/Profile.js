@@ -2,64 +2,41 @@ import Collection from "./Collection";
 import Project from "./Project";
 import Skill from "./Skill";
 
-const Profile = () => {
+const Profile = function() {
 
-  // Private Fields
-  let categories;
+  const categories = ["Architectures", "Frameworks", "Languages"];
 
-  // Public Fields
-  let Name;
-  let Phone;
-  let Projects;
-  let Architectures;
-  let Frameworks;
-  let Languages;
-
-  // Private Functions
-  let initialize;
-  let updateProjectSkillDurations;
-  let updateSkillAfterAddition;
-  let updateSkillAfterRemoval;
-  let updateSkill;
-  let rollupSkills;
-
-  // Public Functions
-  let HydrateIn;
-  let HydrateOut
-
-  // Public Event Handlers
-  let OnProjectDurationModified;
-  let OnSkillsModified;
-
-  HydrateIn = (json) => {
-    Name = json.Name;
-    Phone = json.Phone;
-    Projects = Projects.HydrateIn(json.Projects, Project);
-    Architectures.HydrateIn(json.Architectures, Skill);
-    Frameworks.HydrateIn(json.Frameworks, Skill);
-    Languages.HydrateIn(json.Languages, Skill);
+  const HydrateIn = (json) => {
+    me.Id = json.Id;
+    me.Name = json.Name;
+    me.Phone = json.Phone;
+    me.Projects.HydrateIn(json.Projects, Project);
+    me.Architectures.HydrateIn(json.Architectures, Skill);
+    me.Frameworks.HydrateIn(json.Frameworks, Skill);
+    me.Languages.HydrateIn(json.Languages, Skill);
   };
 
-  HydrateOut = () => {
+  const HydrateOut = function() {
     return {
-      Name,
-      Phone,
-      Projects: Projects.HydrateOut(),
-      Architectures: Architectures.HydrateOut(),
-      Frameworks: Frameworks.HydrateOut(),
-      Languages: Languages.HydrateOut(),
+      Id: me.Id,
+      Name: me.Name,
+      Phone: me.Phone,
+      Projects: me.Projects.HydrateOut(),
+      Architectures: me.Architectures.HydrateOut(),
+      Frameworks: me.Frameworks.HydrateOut(),
+      Languages: me.Languages.HydrateOut(),
     };
   };
 
-  OnProjectDurationModified = (payload) => {
+  const OnProjectDurationModified = (payload) => {
     updateProjectSkillDurations(payload.Project, payload.Change.OldValue, payload.Change.NewValue);
   };
 
-  OnSkillsModified = (payload) => {
-    updateSkill(payload.Project, payload.Category, payload.Item, payload.Change);
+  const OnSkillsModified = (payload) => {
+    //updateSkill(payload.Project, payload.Category, payload.Item, payload.Change);
   };
 
-  updateProjectSkillDurations = (project, oldValue, newValue) => {
+  const updateProjectSkillDurations = (project, oldValue, newValue) => {
     categories.forEach(skillCategory => {
       project[skillCategory].Items.forEach(skillName => {
         const skill = Profile[skillCategory].FindByName(skillName);
@@ -71,22 +48,22 @@ const Profile = () => {
     });
   };
 
-  updateSkillAfterAddition = (project, skillCategory, skillName) => {
+  const updateSkillAfterAddition = (project, skillCategory, skillName) => {
     const skill = Profile[skillCategory].FindByName(skillName);
     skill.Years += project.Duration;
     skill.Projects += 1;
   };
 
-  updateSkillAfterRemoval = (project, skillCategory, skillName) => {
+  const updateSkillAfterRemoval = (project, skillCategory, skillName) => {
     const affectedDuration = project.Calculate;
     const skill = Profile[skillCategory].FindByName(skillName);
     skill.Years -= project.Duration;
     skill.Projects -= 1;
   };
 
-  rollupSkills = () => {
+  const rollupSkills = () => {
     const skillNames = new Set();
-    Projects.Items.forEach(project => {
+    me.Projects.Items.forEach(project => {
       categories.forEach(skillCategory => {
         project[skillCategory].Items.forEach(skillName => {
           skillNames.add(skillName);
@@ -98,7 +75,7 @@ const Profile = () => {
         const skill = Profile[skillCategory].FindByName(skillName);
         skill.Projects = 0;
         skill.Years = 0;
-        Projects.Items.forEach((project) => {
+        me.Projects.Items.forEach((project) => {
           project[skillCategory].Items.forEach(skillItem => {
             if (skillName === skillItem) {
               skill.Projects += 1;
@@ -110,32 +87,22 @@ const Profile = () => {
     }
   };
 
-  initialize = () => {
-    Architectures = Collection();
-    Frameworks = Collection();
-    Languages = Collection();
-    Projects = Collection({ HydrationOutEnabled: true });
-    categories = ["Architectures", "Frameworks", "Languages"];
-    console.log("Profile Initialized");
-  };
-
-  initialize();
-
-  return {
-    Name,
-    Phone,
-    Projects,
-    Architectures,
-    Frameworks,
-    Languages,
+  const me = {
+    Id: 1,
+    Name: "Joshua Ramirez",
+    Phone: "",
+    Architectures: Collection(),
+    Frameworks: Collection(),
+    Languages: Collection(),
+    Projects: Collection({ IsComplexObjectArray: true }),
     OnProjectDurationModified,
     OnSkillsModified,
     HydrateIn,
     HydrateOut,
   };
 
-};
+  return me;
 
-console.log("Profile");
+};
 
 export default Profile;

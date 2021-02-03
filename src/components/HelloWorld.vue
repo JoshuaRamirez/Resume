@@ -1,8 +1,8 @@
 <template>
   <div>
     <h3>Joshua Ramirez</h3>
-    <div><label>Name</label><input /></div>
-    <div><label>Phone</label><input /></div>
+    <div><label>Name</label><input v-model="Name" /></div>
+    <div><label>Phone</label><input v-model="Phone" /></div>
     <h3>Architectures</h3>
     <table style="margin: auto">
       <tr>
@@ -38,13 +38,17 @@
 
 <script>
 import Runtime from "../Domain/Runtime";
+import Data from "../Data";
 const profile = Runtime.Profile;
-const created = function () {};
-const onSaveButtonClicked = () => {
-  const json = profile.HydrateOut();
-  console.log(json);
+const created = async function () {
+  const json = await Data.ReadProfile(1);
+  profile.HydrateIn(json);
 };
-const onRemoveArchitectureButtonClicked = (index) => {
+const onSaveButtonClicked = async function() {
+  const json = profile.HydrateOut();
+  await Data.UpdateProfile(json);
+};
+const onRemoveArchitectureButtonClicked = function(index) {
   profile.Architectures.Items.splice(index, 1);
 };
 const onAddArchitectureButtonClicked = function () {
@@ -56,12 +60,12 @@ const onAddArchitectureButtonClicked = function () {
   });
 };
 const data = function () {
-  return { Architectures: profile.Architectures };
+  return profile;
 };
 const methods = {
   onAddArchitectureButtonClicked,
   onRemoveArchitectureButtonClicked,
-  onSaveButtonClicked
+  onSaveButtonClicked,
 };
 export default { data, methods, created };
 </script>
