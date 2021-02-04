@@ -120,6 +120,7 @@
 <style lang="scss" scoped>
 .md-app {
   border: 1px solid rgba(#000, 0.12);
+  height: 100vh;
 }
 
 // Demo purposes only
