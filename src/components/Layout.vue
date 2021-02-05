@@ -39,8 +39,7 @@
         </md-list>
       </md-app-drawer>
       <md-app-content>
-        <EditContactInformation />
-        <EditArchitectures />
+        <edit-profile />
       </md-app-content>
     </md-app>
   </div>
@@ -63,8 +62,7 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Data from "../Data";
-import EditArchitectures from "./EditArchitectures.vue";
-import EditContactInformation from "./EditContactInformation.vue";
+import EditProfile from "./EditProfile.vue";
 const profile = Runtime.Profile;
 const created = async function () {
   const json = await Data.ReadProfile(1);
@@ -74,24 +72,20 @@ const onSaveButtonClicked = async function () {
   const json = profile.HydrateOut();
   await Data.UpdateProfile(json);
 };
-const data = function () {
-  return {
-    Domain: profile,
-    VM: {
-      menuVisible: false,
-    },
-  };
-};
-const methods = {
-  onSaveButtonClicked,
-};
 export default {
   components: {
-    EditArchitectures,
-    EditContactInformation,
+    EditProfile,
   },
-  data,
-  methods,
+  data: function () {
+    return {
+      VM: {
+        menuVisible: false,
+      },
+    };
+  },
+  methods: {
+    onSaveButtonClicked,
+  },
   created,
 };
 </script>
