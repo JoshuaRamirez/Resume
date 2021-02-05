@@ -10,9 +10,9 @@
         </md-button>
         <span class="md-title">Resume</span>
         <div class="md-toolbar-section-end">
-          <md-button v-on:click="onSaveButtonClicked()"
-            ><md-icon>save</md-icon> Publish</md-button
-          >
+          <md-button v-on:click="onSaveButtonClicked()">
+            <md-icon>save</md-icon> Publish
+          </md-button>
         </div>
       </md-app-toolbar>
       <md-app-drawer :md-active.sync="VM.menuVisible">
