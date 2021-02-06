@@ -9,11 +9,13 @@
         <md-icon>add</md-icon>
       </md-button>
     </md-toolbar>
-    <md-progress-bar
-      v-if="!Profile"
-      class="progress-bar"
-      md-mode="indeterminate"
-    ></md-progress-bar>
+    <transition name="fade">
+      <md-progress-bar
+        v-if="!Profile"
+        class="progress-bar"
+        md-mode="indeterminate"
+      ></md-progress-bar>
+    </transition>
     <md-card-content>
       <table v-if="Profile" style="margin: auto">
         <tr
@@ -75,6 +77,13 @@
 }
 .md-card {
   margin: 20px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 

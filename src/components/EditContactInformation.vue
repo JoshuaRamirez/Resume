@@ -3,11 +3,13 @@
     <md-toolbar md-elevation="1">
       <h3 class="md-sub-title" style="flex: 1">Contact Information</h3>
     </md-toolbar>
-    <md-progress-bar
-      v-if="!Profile"
-      class="progress-bar"
-      md-mode="indeterminate"
-    ></md-progress-bar>
+    <transition name="fade">
+      <md-progress-bar
+        v-if="!Profile"
+        class="progress-bar"
+        md-mode="indeterminate"
+      ></md-progress-bar>
+    </transition>
     <md-card-content>
       <div v-if="Profile">
         <md-field>
@@ -29,6 +31,13 @@
 }
 .md-card {
   margin: 20px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 

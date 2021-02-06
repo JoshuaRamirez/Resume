@@ -39,6 +39,13 @@
         </md-list>
       </md-app-drawer>
       <md-app-content>
+        <transition name="fade">
+          <md-progress-bar
+            v-if="VM.Saving"
+            class="progress-bar"
+            md-mode="indeterminate"
+          ></md-progress-bar>
+        </transition>
         <router-view></router-view>
       </md-app-content>
     </md-app>
@@ -57,6 +64,15 @@
 .md-card {
   margin: 20px;
 }
+.md-progress-bar {
+  margin-bottom: -5px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
 
 <script>
@@ -65,7 +81,9 @@ import Data from "../Data";
 let profile;
 const onSaveButtonClicked = async function () {
   const json = profile.HydrateOut();
+  this.$data.VM.Saving = true;
   await Data.UpdateProfile(json);
+  this.$data.VM.Saving = false;
 };
 export default {
   async created() {
@@ -75,6 +93,7 @@ export default {
     return {
       VM: {
         menuVisible: false,
+        Saving: false,
       },
     };
   },
