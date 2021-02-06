@@ -42,7 +42,7 @@
         <transition name="fade">
           <md-progress-bar
             v-if="VM.Saving"
-            class="progress-bar"
+            class="progress-bar md-accent"
             md-mode="indeterminate"
           ></md-progress-bar>
         </transition>
@@ -65,7 +65,10 @@
   margin: 20px;
 }
 .md-progress-bar {
-  margin-bottom: -5px;
+  margin-top: -16px;
+  margin-left: -17px;
+  margin-right: -17px;
+  margin-bottom: 31px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
