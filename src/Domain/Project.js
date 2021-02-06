@@ -4,40 +4,15 @@ import Skill from "./Skill";
 
 const Project = () => {
 
-  // Private Fields 
   let _startDate;
   let _endDate;
   let _duration;
 
-  // Public Fields
-  let Architectures;
-  let Frameworks;
-  let Languages;
-  
-  // Private Functions
-  let initialize;
-  let createSkillCollectionOptions;
-  
-  // Public Functions
-  let SetDuration;
-  let HydrateIn;
-  let HydrateOut;
-  //let CalculateDurationInYears;
-
-  initialize = () => {
-    Architectures = Collection(createSkillCollectionOptions("Architectures"));
-    Frameworks = Collection(createSkillCollectionOptions("Frameworks"));
-    Languages = Collection(createSkillCollectionOptions("Languages"));
+  const getDuration = () => {
+    return _duration;
   };
 
-  createSkillCollectionOptions = (category) => {
-    return {
-      ModifiedEventPublisher: (payload) => Events.SkillModified(payload),
-      ModifiedEventPayload: {Category: category, Project: Project},
-    };
-  };
-
-  SetDuration = (startDate, endDate) => {
+  const setDuration = (startDate, endDate) => {
     const change = {};
     change.oldValue = _duration;
     _duration = Math.floor(_endDate - _startDate) / (1000 * 60 * 60 * 24 * 365);
@@ -46,44 +21,75 @@ const Project = () => {
     _endDate = endDate;    
     Events.ProjectDurationModified({Project, Change: change});
   };
+
+  const getStartDate = () => {
+    return _startDate;
+  };
+
+  const setStartDate = (value) => {
+    _startDate = value;
+    setDuration(_startDate, _endDate);
+  };
+
+  const getEndDate = () => {
+    return _endDate;
+  };
+
+  const setEndDate = (value) => {
+    _endDate = value;
+    setDuration(_startDate, _endDate);
+  };
   
-  HydrateIn = (json) => {    
+  const HydrateIn = (json) => {    
     _startDate = json.StartDate,
     _endDate = json.EndDate,
     _duration = json.Duration;
-    Architectures.HydrateIn(json.Architectures, Skill);
-    Frameworks.HydrateIn(json.Frameworks, Skill);
-    Languages.HydrateIn(json.Languages, Skill);
+    me.Id = json.Id;
+    me.Title = json.Title;
+    me.Company = json.Company;
+    me.Architectures.HydrateIn(json.Architectures, Skill);
+    me.Frameworks.HydrateIn(json.Frameworks, Skill);
+    me.Languages.HydrateIn(json.Languages, Skill);
   };
   
-  HydrateOut = () => {
+  const HydrateOut = () => {
     return {
+      Id: me.Id,
       StartDate: _startDate,
       EndDate: _endDate,
       Duration: _duration,
-      Architectures: Architectures.HydrateOut(),
-      Frameworks: Frameworks.HydrateOut(),
-      Languages: Languages.HydrateOut(),
+      Title: me.Title,
+      Company: me.Company,
+      Architectures: me.Architectures.HydrateOut(),
+      Frameworks: me.Frameworks.HydrateOut(),
+      Languages: me.Languages.HydrateOut(),
     }
   };
 
-  initialize();
-
-  return {
-    SetDuration,
-    get Duration() {
-      return _duration;
-    },
-    get StartDate() {
-      return _startDate;
-    },
-    get EndDate() {
-      return _endDate;
-    },
-    Architectures,
-    Frameworks,
-    Languages,
+  const createSkillCollectionOptions = (category) => {
+    return {
+      ModifiedEventPublisher: (payload) => Events.SkillModified(payload),
+      ModifiedEventPayload: {Category: category, Project: Project},
+    };
   };
+  
+  const me = {
+    Id: Date.now(),
+    Architectures: Collection(createSkillCollectionOptions("Architectures")),
+    Frameworks: Collection(createSkillCollectionOptions("Frameworks")),
+    Languages: Collection(createSkillCollectionOptions("Languages")),
+    Title: "",
+    Company: "",
+    get Duration() {return getDuration();},
+    get StartDate() {return getStartDate();},
+    get EndDate() {return getEndDate();},
+    set StartDate(value) {return setStartDate(value);},
+    set EndDate(value) {return setEndDate(value);},
+    HydrateOut,
+    HydrateIn,
+  };
+
+  return me;
 
 };
 

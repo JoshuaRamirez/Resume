@@ -25,6 +25,10 @@ const Collection = (options) => {
     me.Reset(subset);
   };
 
+  const RemoveAt = (index) => {
+    me.Items.splice(index, 1);
+  };
+
   const Reset = function(withItems) {
     me.Items.splice(0, me.Items.length);
     me.Items.push(...withItems);
@@ -61,6 +65,10 @@ const Collection = (options) => {
     return me.Items.find(item => item.Name === name);
   };
 
+  const FindById = (id) => {
+    return me.Items.find(item => item.Id.toString() === id.toString());
+  };
+
   const initialize = () => {
     if (options && options.ModifiedEventPublisher) {
       modifiedEventPublisher = options.ModifiedEventPublisher;
@@ -82,8 +90,10 @@ const Collection = (options) => {
     Items: [],
     Add,
     Remove,
+    RemoveAt,
     RemoveByName,
     FindByName,
+    FindById,
     Reset,
     HydrateIn,
     HydrateOut,

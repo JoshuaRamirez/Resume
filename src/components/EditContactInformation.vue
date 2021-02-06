@@ -3,31 +3,45 @@
     <md-toolbar md-elevation="1">
       <h3 class="md-sub-title" style="flex: 1">Contact Information</h3>
     </md-toolbar>
+    <md-progress-bar
+      v-if="!Profile"
+      class="progress-bar"
+      md-mode="indeterminate"
+    ></md-progress-bar>
     <md-card-content>
-      <md-field>
-        <label>Name</label>
-        <md-input v-model="Domain.Name" />
-      </md-field>
-      <md-field>
-        <label>Phone</label>
-        <md-input v-model="Domain.Phone" />
-      </md-field>
+      <div v-if="Profile">
+        <md-field>
+          <label>Name</label>
+          <md-input v-model="Profile.Name" />
+        </md-field>
+        <md-field>
+          <label>Phone</label>
+          <md-input v-model="Profile.Phone" />
+        </md-field>
+      </div>
     </md-card-content>
   </md-card>
 </template>
 
 <style lang="scss" scoped>
+.progress-bar {
+  margin-bottom: -5px;
+}
+.md-card {
+  margin: 20px;
+}
 </style>
 
 <script>
 import Runtime from "../Domain/Runtime";
-const profile = Runtime.Profile;
-const data = function () {
-  return {
-    Domain: profile,
-  };
-};
 export default {
-  data,
+  data() {
+    return {
+      Profile: null,
+    };
+  },
+  async created() {
+    this.$data.Profile = await Runtime.Profile();
+  },
 };
 </script>

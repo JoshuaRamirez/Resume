@@ -39,7 +39,7 @@
         </md-list>
       </md-app-drawer>
       <md-app-content>
-        <edit-profile />
+        <router-view></router-view>
       </md-app-content>
     </md-app>
   </div>
@@ -62,21 +62,16 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Data from "../Data";
-import EditProfile from "./EditProfile.vue";
-const profile = Runtime.Profile;
-const created = async function () {
-  const json = await Data.ReadProfile(1);
-  profile.HydrateIn(json);
-};
+let profile;
 const onSaveButtonClicked = async function () {
   const json = profile.HydrateOut();
   await Data.UpdateProfile(json);
 };
 export default {
-  components: {
-    EditProfile,
+  async created() {
+    profile = await Runtime.Profile();
   },
-  data: function () {
+  data() {
     return {
       VM: {
         menuVisible: false,
@@ -86,6 +81,5 @@ export default {
   methods: {
     onSaveButtonClicked,
   },
-  created,
 };
 </script>
