@@ -1,7 +1,9 @@
 <template>
   <md-card>
     <md-toolbar md-elevation="1">
-      <h3 class="md-sub-title" style="flex: 1">Project {{ Project.Id }}</h3>
+      <h3 class="md-sub-title" style="flex: 1">
+        Project <span v-if="Project">{{ Project.Id }}</span>
+      </h3>
     </md-toolbar>
     <transition name="fade">
       <md-progress-bar
@@ -34,12 +36,28 @@
 </template>
 
 <style lang="sass" scoped>
+.number-field
+  width: 60px
+
+.progress-bar
+  margin-bottom: -5px
+
+.md-card
+  margin: 20px
+
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 1s
+
+.fade-leave-to
+  opacity: 0
 </style>
 
 <script>
 import Runtime from "../Domain/Runtime";
-const findProject = function (id) {
-  const profile = Runtime.CachedProfile;
+const findProject = function (context) {
+  const id = context.$route.params.id;
+  const profile = Runtime.Profile;
   const project = profile.Projects.FindById(id);
   return project;
 };
@@ -50,13 +68,12 @@ export default {
     };
   },
   async created() {
-    this.Profile = await Runtime.LoadProfile();
+    await Runtime.LoadProfile();
+    this.Project = findProject(this);
   },
   watch: {
     $route() {
-      const id = this.$route.params.id;
-      const project = findProject(id);
-      this.Project = project;
+      this.Project = findProject(this);
     },
   },
 };
