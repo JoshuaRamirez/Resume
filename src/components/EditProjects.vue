@@ -90,14 +90,12 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Project from "../Domain/Project";
-import Profile from "../Domain/Profile";
-let profile = Profile();
 const onRemoveProjectButtonClicked = function (index) {
-  profile.Projects.RemoveAt(index);
+  this.Profile.Projects.RemoveAt(index);
 };
 const onAddProjectButtonClicked = function () {
   const newProject = Project();
-  profile.Projects.Add(newProject);
+  this.Profile.Projects.Add(newProject);
 };
 const onEditProjectButtonClicked = function (id) {
   this.$router.push({ path: `/project/${id}` });
@@ -109,7 +107,7 @@ export default {
     };
   },
   async created() {
-    this.$data.Profile = await Runtime.Profile();
+    this.Profile = await Runtime.LoadProfile();
   },
   methods: {
     onAddProjectButtonClicked,

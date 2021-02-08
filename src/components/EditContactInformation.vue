@@ -46,11 +46,11 @@ import Runtime from "../Domain/Runtime";
 export default {
   data() {
     return {
-      Profile: null,
+      Profile: null
     };
   },
   async created() {
-    this.$data.Profile = await Runtime.Profile();
+    this.Profile = await Runtime.LoadProfile();
   },
 };
 </script>

@@ -81,24 +81,23 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Data from "../Data";
-let profile;
 const onSaveButtonClicked = async function () {
-  const json = profile.HydrateOut();
-  this.$data.VM.Saving = true;
+  const json = Runtime.Profile.HydrateOut();
+  this.VM.Saving = true;
   await Data.UpdateProfile(json);
-  this.$data.VM.Saving = false;
+  this.VM.Saving = false;
 };
 export default {
-  async created() {
-    profile = await Runtime.Profile();
-  },
   data() {
     return {
       VM: {
         menuVisible: false,
         Saving: false,
-      },
+      }
     };
+  },
+  async created() {
+    await Runtime.LoadProfile();
   },
   methods: {
     onSaveButtonClicked,

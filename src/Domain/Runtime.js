@@ -1,20 +1,21 @@
 import Profile from "./Profile";
 import Data from "../Data";
 
-const ProfileCache = async function() {
-  if (me.CachedProfile) {
-    return me.CachedProfile;
+let loaded = false;
+
+async function LoadProfile() {
+  if (loaded) {
+    return me.Profile;
   } else {
     const json = await Data.ReadProfile(1);
-    me.CachedProfile = Profile();
-    me.CachedProfile.HydrateIn(json);
+    me.Profile.HydrateIn(json);
   }
-  return me.CachedProfile;
+  return me.Profile;
 }
 
 const me = {
-  Profile: ProfileCache,
-  CachedProfile: null,
+  LoadProfile,
+  Profile: Profile(),
 };
 
 export default me;

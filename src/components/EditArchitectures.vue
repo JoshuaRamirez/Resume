@@ -96,10 +96,10 @@
 <script>
 import Runtime from "../Domain/Runtime";
 const onRemoveArchitectureButtonClicked = function (index) {
-  this.$data.Profile.Architectures.RemoveAt(index);
+  this.Profile.Architectures.RemoveAt(index);
 };
 const onAddArchitectureButtonClicked = function () {
-  this.$data.Profile.Architectures.Add({
+  this.Profile.Architectures.Add({
     Skill: "",
     Years: "",
     Rating: "",
@@ -113,7 +113,7 @@ export default {
     };
   },
   async created() {
-    this.$data.Profile = await Runtime.Profile();
+    this.Profile = await Runtime.LoadProfile();
   },
   methods: {
     onAddArchitectureButtonClicked,
