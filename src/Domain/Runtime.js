@@ -9,8 +9,9 @@ async function LoadProfile() {
   } else {
     const json = await Data.ReadProfile(1);
     me.Profile.HydrateIn(json);
+    loaded = true;
+    return me.Profile;
   }
-  return me.Profile;
 }
 
 const me = {
