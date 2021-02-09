@@ -32,7 +32,7 @@ const Profile = function() {
     updateProjectSkillDurations(payload.Project, payload.Change.OldValue, payload.Change.NewValue);
   };
 
-  const OnSkillsModified = (payload) => {
+  const OnSkillModified = (payload) => {
     //updateSkill(payload.Project, payload.Category, payload.Item, payload.Change);
   };
 
@@ -96,7 +96,7 @@ const Profile = function() {
     Languages: Collection(),
     Projects: Collection({ IsComplexObjectArray: true }),
     OnProjectDurationModified,
-    OnSkillsModified,
+    OnSkillModified,
     HydrateIn,
     HydrateOut,
   };

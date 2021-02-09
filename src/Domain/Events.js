@@ -1,17 +1,17 @@
-const Runtime = require("./Runtime");
+import Runtime from "./Runtime";
 
-const profile = Runtime.Profile;
-
-const SkillsModified = (category, skillName, change) => {
-  profile.OnSkillsModified(category, skillName, change);
+const SkillModified = (category, skillName, change) => {
+  const profile = Runtime.Profile;
+  profile.OnSkillModified(category, skillName, change);
 };
 
 const ProjectDurationModified = (payload) => {
+  const profile = Runtime.Profile;
   profile.OnProjectDurationModified(payload);
 };
 
 const Events = {
-  SkillsModified,
+  SkillModified,
   ProjectDurationModified,
 };
 
