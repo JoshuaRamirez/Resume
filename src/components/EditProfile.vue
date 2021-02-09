@@ -2,7 +2,7 @@
   <div>
     <EditContactInformation />
     <EditProjects />
-    <EditArchitectures />
+    <EditArchitectures data-source="Profile"/>
   </div>
 </template>
 

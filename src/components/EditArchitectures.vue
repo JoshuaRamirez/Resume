@@ -12,15 +12,15 @@
       </md-toolbar>
       <transition name="fade">
         <md-progress-bar
-          v-if="!Profile"
+          v-if="!Architectures"
           class="progress-bar"
           md-mode="indeterminate"
         ></md-progress-bar>
       </transition>
       <md-card-content>
-        <table v-if="Profile" style="margin: auto">
+        <table v-if="Architectures" style="margin: auto">
           <tr
-            v-for="(architecture, index) in Profile.Architectures.Items"
+            v-for="(architecture, index) in Architectures.Items"
             v-bind:key="architecture.Id"
           >
             <td>
@@ -95,25 +95,33 @@
 
 <script>
 import Runtime from "../Domain/Runtime";
+import Skill from "../Domain/Skill";
 const onRemoveArchitectureButtonClicked = function (index) {
-  this.Profile.Architectures.RemoveAt(index);
+  this.Architectures.RemoveAt(index);
 };
 const onAddArchitectureButtonClicked = function () {
-  this.Profile.Architectures.Add({
-    Skill: "",
-    Years: "",
-    Rating: "",
-    Interest: "",
-  });
+  const skill = Skill();
+  this.Architectures.Add(skill);
 };
 export default {
+  props: ["dataSource", "parentId"],
   data() {
     return {
-      Profile: null,
+      DataSource: this.dataSource,
+      ParentId: this.parentId,
+      Architectures: null,
     };
   },
   async created() {
-    this.Profile = await Runtime.LoadProfile();
+    const profile = await Runtime.LoadProfile();
+    if (this.DataSource === "Profile") {
+      this.Architectures = profile.Architectures;
+    }
+    if (this.DataSource === "Project" && this.ParentId) {
+      const project = profile.Projects.FindById(this.ParentId);
+      this.Architectures = project.Architectures;
+    }
+    console.log(this.Architectures);
   },
   methods: {
     onAddArchitectureButtonClicked,
