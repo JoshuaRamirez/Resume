@@ -1,34 +1,34 @@
 export default function CreateSkill() {
 
-  const HydrateIn = function(json) {
+  const HydrateIn = function (json) {
     me.Name = json.Name;
     me.Category = json.Category;
     me.Rating = json.Rating;
     me.Interest = json.Interest;
     me.Years = json.Years;
     me.Projects = json.Projects;
-    me.Skill = json.Skill;
   };
 
-  const HydrateOut = function(json) {
+  const HydrateOut = function () {
     return {
-      Name: json.Name,
-      Category: json.Category,
-      Rating: json.Rating,
-      Interest: json.Interest,
-      Years: json.Years,
-      Projects: json.Projects,
-      Skill: json.Skill,
+      Name: me.Name,
+      Category: me.Category,
+      Rating: me.Rating,
+      Interest: me.Interest,
+      Years: me.Years,
+      Projects: me.Projects,
     }
   };
 
   const me = {
+    Id: Date.now(),
     Name: "",
     Category: "",
     Rating: 0,
     Years: 0,
     Interest: 0,
     Projects: 0,
+    PauseEvents: false,
     HydrateIn,
     HydrateOut
   };

@@ -1,18 +1,12 @@
 import Runtime from "./Runtime";
 
-const SkillModified = (category, skillName, change) => {
+const SkillModified = (skill) => {
   const profile = Runtime.Profile;
-  profile.OnSkillModified(category, skillName, change);
-};
-
-const ProjectDurationModified = (payload) => {
-  const profile = Runtime.Profile;
-  profile.OnProjectDurationModified(payload);
+  profile.OnSkillModified(skill);
 };
 
 const Events = {
   SkillModified,
-  ProjectDurationModified,
 };
 
 export default Events;

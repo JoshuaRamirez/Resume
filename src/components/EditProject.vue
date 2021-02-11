@@ -31,6 +31,10 @@
             <label>End Date</label>
             <md-input v-model="Project.EndDate" />
           </md-field>
+          <md-field>
+            <label>Duration</label>
+            <md-input v-model="Project.Duration" />
+          </md-field>
         </div>
       </md-card-content>
     </md-card>

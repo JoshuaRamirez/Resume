@@ -2,7 +2,7 @@ import Collection from "./Collection";
 import Project from "./Project";
 import Skill from "./Skill";
 
-const Profile = function() {
+const Profile = function () {
 
   const categories = ["Architectures", "Frameworks", "Languages"];
 
@@ -14,9 +14,10 @@ const Profile = function() {
     me.Architectures.HydrateIn(json.Architectures, Skill);
     me.Frameworks.HydrateIn(json.Frameworks, Skill);
     me.Languages.HydrateIn(json.Languages, Skill);
+    categories.forEach(updateCategory);
   };
 
-  const HydrateOut = function() {
+  const HydrateOut = function () {
     return {
       Id: me.Id,
       Name: me.Name,
@@ -28,64 +29,41 @@ const Profile = function() {
     };
   };
 
-  const OnProjectDurationModified = (payload) => {
-    updateProjectSkillDurations(payload.Project, payload.Change.OldValue, payload.Change.NewValue);
+  const OnSkillModified = (skill) => {
+    const modifiedCategory = skill.Category;
+    updateCategory(modifiedCategory);
   };
 
-  const OnSkillModified = (payload) => {
-    //updateSkill(payload.Project, payload.Category, payload.Item, payload.Change);
-  };
-
-  const updateProjectSkillDurations = (project, oldValue, newValue) => {
-    categories.forEach(skillCategory => {
-      project[skillCategory].Items.forEach(skillName => {
-        const skill = Profile[skillCategory].FindByName(skillName);
-        if (skill) {
-          skill.Years -= oldValue;
-          skill.Years += newValue;
+  function updateCategory(modifiedCategory) {
+    const newProfileSkills = [];
+    me.Projects.Items.forEach((project) => {
+      project[modifiedCategory].Items.forEach((projectSkill) => {
+        let existingNewProfileSkill = newProfileSkills.find(x => x.Name === projectSkill.Name);
+        if (!existingNewProfileSkill) {
+          const projectSkillJson = projectSkill.HydrateOut();
+          const newProfileSkill = Skill();
+          newProfileSkill.HydrateIn(projectSkillJson);
+          newProfileSkill.PauseEvents = true;
+          newProfileSkill.Id = Date.now();
+          newProfileSkill.Projects = 0;
+          newProfileSkill.Years = 0;
+          newProfileSkills.push(newProfileSkill);
+          existingNewProfileSkill = newProfileSkill;
         }
       });
     });
-  };
-
-  const updateSkillAfterAddition = (project, skillCategory, skillName) => {
-    const skill = Profile[skillCategory].FindByName(skillName);
-    skill.Years += project.Duration;
-    skill.Projects += 1;
-  };
-
-  const updateSkillAfterRemoval = (project, skillCategory, skillName) => {
-    const affectedDuration = project.Calculate;
-    const skill = Profile[skillCategory].FindByName(skillName);
-    skill.Years -= project.Duration;
-    skill.Projects -= 1;
-  };
-
-  const rollupSkills = () => {
-    const skillNames = new Set();
-    me.Projects.Items.forEach(project => {
-      categories.forEach(skillCategory => {
-        project[skillCategory].Items.forEach(skillName => {
-          skillNames.add(skillName);
+    newProfileSkills.forEach((newProfileSkill) => {
+      me.Projects.Items.forEach((project) => {
+        project[modifiedCategory].Items.forEach((projectSkill) => {
+          if (newProfileSkill.Name === projectSkill.Name) {
+            newProfileSkill.Projects += 1;
+            newProfileSkill.Years += project.Duration;
+          }
         });
       });
     });
-    for (let skillName of skillNames) {
-      categories.forEach(skillCategory => {
-        const skill = Profile[skillCategory].FindByName(skillName);
-        skill.Projects = 0;
-        skill.Years = 0;
-        me.Projects.Items.forEach((project) => {
-          project[skillCategory].Items.forEach(skillItem => {
-            if (skillName === skillItem) {
-              skill.Projects += 1;
-              skill.Years += project.CaluclateDurationInYears();
-            }
-          });
-        })
-      });
-    }
-  };
+    me[modifiedCategory].Reset(newProfileSkills);
+  }
 
   const me = {
     Id: 1,
@@ -94,8 +72,7 @@ const Profile = function() {
     Architectures: Collection(),
     Frameworks: Collection(),
     Languages: Collection(),
-    Projects: Collection({ IsComplexObjectArray: true }),
-    OnProjectDurationModified,
+    Projects: Collection(),
     OnSkillModified,
     HydrateIn,
     HydrateOut,

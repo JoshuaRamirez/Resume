@@ -1,25 +1,23 @@
-import Events from "./Events";
 import Collection from "./Collection";
 import Skill from "./Skill";
 
 const Project = () => {
 
-  let _startDate;
-  let _endDate;
-  let _duration;
+  let _startDate = null;
+  let _endDate = null;
+  let _duration = 0;
 
   const getDuration = () => {
+    if(_duration === undefined) _duration = 0;
     return _duration;
   };
 
   const setDuration = (startDate, endDate) => {
-    const change = {};
-    change.oldValue = _duration;
-    _duration = Math.floor(_endDate - _startDate) / (1000 * 60 * 60 * 24 * 365);
-    change.newValue = _duration;
+    const startDateCast = new Date(startDate);
+    const endDateCast = new Date(endDate);
+    _duration = Math.floor(endDateCast - startDateCast) / (1000 * 60 * 60 * 24 * 365);
     _startDate = startDate;
     _endDate = endDate;    
-    Events.ProjectDurationModified({Project, Change: change});
   };
 
   const getStartDate = () => {
@@ -65,19 +63,12 @@ const Project = () => {
       Languages: me.Languages.HydrateOut(),
     }
   };
-
-  const createSkillCollectionOptions = (category) => {
-    return {
-      ModifiedEventPublisher: (payload) => Events.SkillModified(payload),
-      ModifiedEventPayload: {Category: category, Project: Project},
-    };
-  };
   
   const me = {
     Id: Date.now(),
-    Architectures: Collection(createSkillCollectionOptions("Architectures")),
-    Frameworks: Collection(createSkillCollectionOptions("Frameworks")),
-    Languages: Collection(createSkillCollectionOptions("Languages")),
+    Architectures: Collection(),
+    Frameworks: Collection(),
+    Languages: Collection(),
     Title: "",
     Company: "",
     get Duration() {return getDuration();},

@@ -1,35 +1,23 @@
-const Collection = (options) => {
-
-  let modifiedEventPublisher = () => { };
-  let modifiedEventPayload = {};
-  let itemName = "";
-  let isComplexObjectArray = false;
+const Collection = () => {
 
   const Add = (item) => {
     me.Items.push(item);
-    modifiedEventPayload.Item = item;
-    modifiedEventPayload.Change = "added";
-    modifiedEventPublisher(modifiedEventPayload);
   };
 
   const Remove = (test) => {
-    const subset = me.Items.map(item => {
-      if (test(item)) {
-        modifiedEventPayload.Item = item;
-        modifiedEventPayload.Change = "removed";
-        modifiedEventPublisher(modifiedEventPayload);
-      } else {
-        return item;
-      }
-    });
-    me.Reset(subset);
+    const indexToRemove = me.Items.findIndex(test);
+    RemoveAt(indexToRemove);
   };
 
   const RemoveAt = (index) => {
     me.Items.splice(index, 1);
   };
 
-  const Reset = function(withItems) {
+  const RemoveByName = (name) => {
+    Remove(item => item.Name === name);
+  };
+
+  const Reset = function (withItems) {
     me.Items.splice(0, me.Items.length);
     me.Items.push(...withItems);
   };
@@ -50,16 +38,14 @@ const Collection = (options) => {
   };
 
   const HydrateOut = () => {
-    if (isComplexObjectArray) {
-      return me.Items.map(x => x.HydrateOut());
-    } else {
-      return [...me.Items];
-    }
+    return me.Items.map((item) => {
+      if (item.HydrateOut) {
+        return item.HydrateOut();
+      } else {
+        return item;
+      }
+    });
   }
-
-  const RemoveByName = (name) => {
-    Remove(item => item.Name === name);
-  };
 
   const FindByName = (name) => {
     return me.Items.find(item => item.Name === name);
@@ -69,25 +55,9 @@ const Collection = (options) => {
     return me.Items.find(item => item.Id.toString() === id.toString());
   };
 
-  const initialize = () => {
-    if (options && options.ModifiedEventPublisher) {
-      modifiedEventPublisher = options.ModifiedEventPublisher;
-    }
-    if (options && options.ModifiedEventPayload) {
-      modifiedEventPayload = options.ModifiedEventPayload;
-    }
-    if (options && options.ItemName) {
-      itemName = options.itemName;
-    }
-    if (options && options.IsComplexObjectArray) {
-      isComplexObjectArray = true;
-    }
-  };
-
-  initialize();
-
   const me = {
     Items: [],
+    PauseEvents: false,
     Add,
     Remove,
     RemoveAt,

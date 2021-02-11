@@ -26,16 +26,20 @@
             <td>
               <md-field>
                 <label>Skill</label>
-                <md-input v-model="architecture.Skill"></md-input>
+                <md-input
+                  v-model="architecture.Name"
+                  @change="onChanged(architecture)"
+                ></md-input>
               </md-field>
             </td>
-            <td>
+            <td v-if="DataSource === 'Profile'">
               <md-field>
                 <label>Years</label>
                 <md-input
                   class="number-field"
                   type="number"
                   v-model="architecture.Years"
+                  @change="onChanged(architecture)"
                 ></md-input>
               </md-field>
             </td>
@@ -46,6 +50,7 @@
                   class="number-field"
                   type="number"
                   v-model="architecture.Interest"
+                  @change="onChanged(architecture)"
                 ></md-input>
               </md-field>
             </td>
@@ -56,6 +61,7 @@
                   class="number-field"
                   type="number"
                   v-model="architecture.Rating"
+                  @change="onChanged(architecture)"
                 ></md-input>
               </md-field>
             </td>
@@ -96,12 +102,24 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Skill from "../Domain/Skill";
+import Events from "../Domain/Events";
+const onChanged = function(skill) {
+  Events.SkillModified(skill);
+}
 const onRemoveArchitectureButtonClicked = function (index) {
+  const itemToRemove = this.Architectures.Items[index];
   this.Architectures.RemoveAt(index);
+  if (this.DataSource === "Project") {
+    Events.SkillModified(itemToRemove);
+  }
 };
 const onAddArchitectureButtonClicked = function () {
   const skill = Skill();
+  skill.Category = "Architectures";
   this.Architectures.Add(skill);
+  if (this.DataSource === "Project") {
+    Events.SkillModified(skill);
+  }
 };
 export default {
   props: ["dataSource", "parentId"],
@@ -126,6 +144,7 @@ export default {
   methods: {
     onAddArchitectureButtonClicked,
     onRemoveArchitectureButtonClicked,
+    onChanged,
   },
 };
 </script>
