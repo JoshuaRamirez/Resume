@@ -25,11 +25,14 @@
           </md-field>
           <md-field>
             <label>Start Date</label>
-            <md-input v-model="Project.StartDate" @change="onDurationChanged()"/>
+            <md-input
+              v-model="Project.StartDate"
+              @change="onDurationChanged()"
+            />
           </md-field>
           <md-field>
             <label>End Date</label>
-            <md-input v-model="Project.EndDate"  @change="onDurationChanged()" />
+            <md-input v-model="Project.EndDate" @change="onDurationChanged()" />
           </md-field>
           <md-field>
             <label>Duration</label>
@@ -43,6 +46,18 @@
       data-parent-type="Project"
       v-bind:dataParentId="Project.Id"
       data-property-name="Architectures"
+    ></EditSkills>
+    <EditSkills
+      v-if="Project"
+      data-parent-type="Project"
+      v-bind:dataParentId="Project.Id"
+      data-property-name="Frameworks"
+    ></EditSkills>
+    <EditSkills
+      v-if="Project"
+      data-parent-type="Project"
+      v-bind:dataParentId="Project.Id"
+      data-property-name="Languages"
     ></EditSkills>
   </div>
 </template>
@@ -94,10 +109,10 @@ export default {
     },
   },
   components: {
-    EditSkills
+    EditSkills,
   },
   methods: {
-    onDurationChanged
-  }
+    onDurationChanged,
+  },
 };
 </script>

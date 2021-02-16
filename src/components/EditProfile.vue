@@ -3,6 +3,8 @@
     <EditContactInformation />
     <EditProjects />
     <EditSkills data-parent-type="Profile" data-property-name="Architectures" />
+    <EditSkills data-parent-type="Profile" data-property-name="Frameworks" />
+    <EditSkills data-parent-type="Profile" data-property-name="Languages" />
   </div>
 </template>
 
