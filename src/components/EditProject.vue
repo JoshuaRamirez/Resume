@@ -25,15 +25,15 @@
           </md-field>
           <md-field>
             <label>Start Date</label>
-            <md-input v-model="Project.StartDate" />
+            <md-input v-model="Project.StartDate" @change="onDurationChanged()"/>
           </md-field>
           <md-field>
             <label>End Date</label>
-            <md-input v-model="Project.EndDate" />
+            <md-input v-model="Project.EndDate"  @change="onDurationChanged()" />
           </md-field>
           <md-field>
             <label>Duration</label>
-            <md-input v-model="Project.Duration" />
+            <md-input readonly v-model="Project.Duration" />
           </md-field>
         </div>
       </md-card-content>
@@ -68,6 +68,10 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import EditSkills from "./EditSkills";
+import Events from "../Domain/Events";
+function onDurationChanged() {
+  Events.ProjectDurationModified(this.Project);
+}
 const findProject = function (context) {
   const id = context.$route.params.id;
   const profile = Runtime.Profile;
@@ -91,6 +95,9 @@ export default {
   },
   components: {
     EditSkills
+  },
+  methods: {
+    onDurationChanged
   }
 };
 </script>

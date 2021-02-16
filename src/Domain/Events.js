@@ -5,8 +5,14 @@ const SkillModified = (skill) => {
   profile.OnSkillModified(skill);
 };
 
+const ProjectDurationModified = (project) => {
+  const profile = Runtime.Profile;
+  profile.OnProjectDurationModified(project);
+}
+
 const Events = {
   SkillModified,
+  ProjectDurationModified
 };
 
 export default Events;

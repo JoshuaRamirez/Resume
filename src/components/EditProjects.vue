@@ -45,13 +45,13 @@
           <td>
             <md-field>
               <label>StartDate</label>
-              <md-input v-model="project.StartDate"></md-input>
+              <md-input v-model="project.StartDate" @change="onProjectDurationModified(project)"></md-input>
             </md-field>
           </td>
           <td>
             <md-field>
               <label>EndDate</label>
-              <md-input v-model="project.EndDate"></md-input>
+              <md-input v-model="project.EndDate" @change="onProjectDurationModified(project)"></md-input>
             </md-field>
           </td>
           <td>
@@ -90,6 +90,10 @@
 <script>
 import Runtime from "../Domain/Runtime";
 import Project from "../Domain/Project";
+import Events from "../Domain/Events";
+function onProjectDurationModified(project) {
+  Events.ProjectDurationModified(project)
+}
 const onRemoveProjectButtonClicked = function (index) {
   this.Profile.Projects.RemoveAt(index);
 };
@@ -113,6 +117,7 @@ export default {
     onAddProjectButtonClicked,
     onEditProjectButtonClicked,
     onRemoveProjectButtonClicked,
+    onProjectDurationModified,
   },
 };
 </script>

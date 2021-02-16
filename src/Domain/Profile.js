@@ -29,6 +29,14 @@ const Profile = function () {
     };
   };
 
+  const OnProjectDurationModified = (project) => {
+    [
+      "Architectures", 
+      "Frameworks", 
+      "Languages"
+    ].forEach(updateCategory);
+  }
+
   const OnSkillModified = (skill) => {
     const modifiedCategory = skill.Category;
     updateCategory(modifiedCategory);
@@ -74,6 +82,7 @@ const Profile = function () {
     Languages: Collection(),
     Projects: Collection(),
     OnSkillModified,
+    OnProjectDurationModified,
     HydrateIn,
     HydrateOut,
   };
