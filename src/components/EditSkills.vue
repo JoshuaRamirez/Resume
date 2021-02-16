@@ -2,7 +2,7 @@
   <div>
     <md-card>
       <md-toolbar md-elevation="1">
-        <h3 class="md-sub-title" style="flex: 1">Architectures</h3>
+        <h3 class="md-sub-title" style="flex: 1">{{DataPropertyName}}</h3>
         <md-button
           v-on:click="onAddArchitectureButtonClicked()"
           class="md-icon-button md-raised"
@@ -12,34 +12,34 @@
       </md-toolbar>
       <transition name="fade">
         <md-progress-bar
-          v-if="!Architectures"
+          v-if="!Skills"
           class="progress-bar"
           md-mode="indeterminate"
         ></md-progress-bar>
       </transition>
       <md-card-content>
-        <table v-if="Architectures" style="margin: auto">
+        <table v-if="Skills" style="margin: auto">
           <tr
-            v-for="(architecture, index) in Architectures.Items"
-            v-bind:key="architecture.Id"
+            v-for="(skill, index) in Skills.Items"
+            v-bind:key="skill.Id"
           >
             <td>
               <md-field>
-                <label>Skill</label>
+                <label>Name</label>
                 <md-input
-                  v-model="architecture.Name"
-                  @change="onChanged(architecture)"
+                  v-model="skill.Name"
+                  @change="onChanged(skill)"
                 ></md-input>
               </md-field>
             </td>
-            <td v-if="DataSource === 'Profile'">
+            <td v-if="DataParentType === 'Profile'">
               <md-field>
                 <label>Years</label>
                 <md-input
                   class="number-field"
                   type="number"
-                  v-model="architecture.Years"
-                  @change="onChanged(architecture)"
+                  v-model="skill.Years"
+                  @change="onChanged(skill)"
                 ></md-input>
               </md-field>
             </td>
@@ -49,8 +49,8 @@
                 <md-input
                   class="number-field"
                   type="number"
-                  v-model="architecture.Interest"
-                  @change="onChanged(architecture)"
+                  v-model="skill.Interest"
+                  @change="onChanged(skill)"
                 ></md-input>
               </md-field>
             </td>
@@ -60,8 +60,8 @@
                 <md-input
                   class="number-field"
                   type="number"
-                  v-model="architecture.Rating"
-                  @change="onChanged(architecture)"
+                  v-model="skill.Rating"
+                  @change="onChanged(skill)"
                 ></md-input>
               </md-field>
             </td>
@@ -107,39 +107,40 @@ const onChanged = function(skill) {
   Events.SkillModified(skill);
 }
 const onRemoveArchitectureButtonClicked = function (index) {
-  const itemToRemove = this.Architectures.Items[index];
-  this.Architectures.RemoveAt(index);
-  if (this.DataSource === "Project") {
+  const itemToRemove = this.Skills.Items[index];
+  this.Skills.RemoveAt(index);
+  if (this.DataParentType === "Project") {
     Events.SkillModified(itemToRemove);
   }
 };
 const onAddArchitectureButtonClicked = function () {
   const skill = Skill();
-  skill.Category = "Architectures";
-  this.Architectures.Add(skill);
-  if (this.DataSource === "Project") {
+  skill.Category = this.DataPropertyName;
+  this.Skills.Add(skill);
+  if (this.DataParentType === "Project") {
     Events.SkillModified(skill);
   }
 };
 export default {
-  props: ["dataSource", "parentId"],
+  props: ["dataParentType", "dataPropertyName",  "dataParentId"],
   data() {
     return {
-      DataSource: this.dataSource,
-      ParentId: this.parentId,
-      Architectures: null,
+      DataParentId: this.dataParentId,
+      DataParentType: this.dataParentType,
+      DataPropertyName: this.dataPropertyName,
+      Skills: null,
     };
   },
   async created() {
     const profile = await Runtime.LoadProfile();
-    if (this.DataSource === "Profile") {
-      this.Architectures = profile.Architectures;
+    const dataPropertyName = this.DataPropertyName;
+    if (this.DataParentType === "Profile") {
+      this.Skills = profile[dataPropertyName];
     }
-    if (this.DataSource === "Project" && this.ParentId) {
-      const project = profile.Projects.FindById(this.ParentId);
-      this.Architectures = project.Architectures;
-    }
-    console.log(this.Architectures);
+    if (this.DataParentType === "Project") {
+      const project = profile.Projects.FindById(this.DataParentId);
+      this.Skills = project[dataPropertyName];
+    } 
   },
   methods: {
     onAddArchitectureButtonClicked,

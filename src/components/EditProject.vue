@@ -38,11 +38,12 @@
         </div>
       </md-card-content>
     </md-card>
-    <EditArchitectures
+    <EditSkills
       v-if="Project"
-      data-source="Project"
-      v-bind:parentId="Project.Id"
-    ></EditArchitectures>
+      data-parent-type="Project"
+      v-bind:dataParentId="Project.Id"
+      data-property-name="Architectures"
+    ></EditSkills>
   </div>
 </template>
 
@@ -66,7 +67,7 @@
 
 <script>
 import Runtime from "../Domain/Runtime";
-import EditArchitectures from "./EditArchitectures";
+import EditSkills from "./EditSkills";
 const findProject = function (context) {
   const id = context.$route.params.id;
   const profile = Runtime.Profile;
@@ -89,7 +90,7 @@ export default {
     },
   },
   components: {
-    EditArchitectures
+    EditSkills
   }
 };
 </script>

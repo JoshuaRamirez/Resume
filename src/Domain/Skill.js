@@ -21,7 +21,7 @@ export default function CreateSkill() {
   };
 
   const me = {
-    Id: Date.now(),
+    Id: Math.random(),
     Name: "",
     Category: "",
     Rating: 0,

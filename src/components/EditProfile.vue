@@ -2,7 +2,7 @@
   <div>
     <EditContactInformation />
     <EditProjects />
-    <EditArchitectures data-source="Profile"/>
+    <EditSkills data-parent-type="Profile" data-property-name="Architectures" />
   </div>
 </template>
 
@@ -10,12 +10,12 @@
 </style>
 
 <script>
-import EditArchitectures from "./EditArchitectures.vue";
+import EditSkills from "./EditSkills.vue";
 import EditContactInformation from "./EditContactInformation.vue";
 import EditProjects from './EditProjects.vue';
 export default {
   components: {
-    EditArchitectures,
+    EditSkills,
     EditContactInformation,
     EditProjects,
   },
