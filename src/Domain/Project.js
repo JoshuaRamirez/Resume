@@ -16,6 +16,8 @@ const Project = () => {
     const startDateCast = new Date(startDate);
     const endDateCast = new Date(endDate);
     _duration = Math.floor(endDateCast - startDateCast) / (1000 * 60 * 60 * 24 * 365);
+    _duration = _duration.toFixed(2);
+    _duration = Number.parseFloat(_duration);
     _startDate = startDate;
     _endDate = endDate;    
   };
