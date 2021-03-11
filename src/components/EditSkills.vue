@@ -4,7 +4,7 @@
       <md-toolbar md-elevation="1">
         <h3 class="md-sub-title" style="flex: 1">{{DataPropertyName}}</h3>
         <md-button
-          v-on:click="onAddArchitectureButtonClicked()"
+          v-on:click="onAddClicked()"
           class="md-icon-button md-raised"
         >
           <md-icon>add</md-icon>
@@ -67,7 +67,7 @@
             </td>
             <td>
               <md-button
-                v-on:click="onRemoveArchitectureButtonClicked(index)"
+                v-on:click="onRemoveClicked(index)"
                 class="md-icon-button md-raised"
               >
                 <md-icon>clear</md-icon>
@@ -106,14 +106,14 @@ import Events from "../Domain/Events";
 const onChanged = function(skill) {
   Events.SkillModified(skill);
 }
-const onRemoveArchitectureButtonClicked = function (index) {
+const onRemoveClicked = function (index) {
   const itemToRemove = this.Skills.Items[index];
   this.Skills.RemoveAt(index);
   if (this.DataParentType === "Project") {
     Events.SkillModified(itemToRemove);
   }
 };
-const onAddArchitectureButtonClicked = function () {
+const onAddClicked = function () {
   const skill = Skill();
   skill.Category = this.DataPropertyName;
   this.Skills.Add(skill);
@@ -143,8 +143,8 @@ export default {
     } 
   },
   methods: {
-    onAddArchitectureButtonClicked,
-    onRemoveArchitectureButtonClicked,
+    onAddClicked,
+    onRemoveClicked,
     onChanged,
   },
 };
