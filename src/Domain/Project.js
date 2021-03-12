@@ -47,6 +47,7 @@ const Project = () => {
     me.Id = json.Id;
     me.Title = json.Title;
     me.Company = json.Company;
+    me.Location = json.Location;
     me.Architectures.HydrateIn(json.Architectures, Skill);
     me.Frameworks.HydrateIn(json.Frameworks, Skill);
     me.Languages.HydrateIn(json.Languages, Skill);
@@ -60,6 +61,7 @@ const Project = () => {
       Duration: _duration,
       Title: me.Title,
       Company: me.Company,
+      Location: me.Location,
       Architectures: me.Architectures.HydrateOut(),
       Frameworks: me.Frameworks.HydrateOut(),
       Languages: me.Languages.HydrateOut(),
@@ -73,6 +75,7 @@ const Project = () => {
     Languages: Collection(),
     Title: "",
     Company: "",
+    Location: "",
     get Duration() {return getDuration();},
     get StartDate() {return getStartDate();},
     get EndDate() {return getEndDate();},

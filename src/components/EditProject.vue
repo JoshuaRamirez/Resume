@@ -23,6 +23,9 @@
             <label>Company</label>
             <md-input v-model="Project.Company" />
           </md-field>
+          <md-autocomplete v-model="Project.Location" :md-options="Locations">
+            <label>Location</label>
+          </md-autocomplete>
           <md-field>
             <label>Start Date</label>
             <md-input
@@ -84,6 +87,7 @@
 import Runtime from "../Domain/Runtime";
 import EditSkills from "./EditSkills";
 import Events from "../Domain/Events";
+import States from "../Domain/States";
 function onDurationChanged() {
   Events.ProjectDurationModified(this.Project);
 }
@@ -97,6 +101,7 @@ export default {
   data() {
     return {
       Project: null,
+      Locations: States
     };
   },
   async created() {

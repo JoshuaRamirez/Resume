@@ -43,15 +43,26 @@
             </md-field>
           </td>
           <td>
+            <md-autocomplete v-model="project.Location" :md-options="Locations">
+              <label>Location</label>
+            </md-autocomplete>
+          </td>
+          <td>
             <md-field>
               <label>StartDate</label>
-              <md-input v-model="project.StartDate" @change="onProjectDurationModified(project)"></md-input>
+              <md-input
+                v-model="project.StartDate"
+                @change="onProjectDurationModified(project)"
+              ></md-input>
             </md-field>
           </td>
           <td>
             <md-field>
               <label>EndDate</label>
-              <md-input v-model="project.EndDate" @change="onProjectDurationModified(project)"></md-input>
+              <md-input
+                v-model="project.EndDate"
+                @change="onProjectDurationModified(project)"
+              ></md-input>
             </md-field>
           </td>
           <td>
@@ -91,8 +102,9 @@
 import Runtime from "../Domain/Runtime";
 import Project from "../Domain/Project";
 import Events from "../Domain/Events";
+import States from "../Domain/States";
 function onProjectDurationModified(project) {
-  Events.ProjectDurationModified(project)
+  Events.ProjectDurationModified(project);
 }
 const onRemoveProjectButtonClicked = function (index) {
   this.Profile.Projects.RemoveAt(index);
@@ -108,6 +120,7 @@ export default {
   data() {
     return {
       Profile: null,
+      Locations: States
     };
   },
   async created() {
